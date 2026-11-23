@@ -29,6 +29,13 @@ def main() -> None:
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
         f.write(JOKE)
+    # Read back what was written and confirm it is exactly the joke:
+    # a partial or mangled write must fail loudly instead of shipping
+    # a file the gate would refuse.
+    with open("/output/entry.txt", "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if written != JOKE:
+        raise ValueError("entry.txt does not match the joke")
 
 
 if __name__ == "__main__":
